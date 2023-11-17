@@ -1,6 +1,6 @@
 {
   "name": "fan-utils-fn",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -15,7 +15,12 @@
     "url": "https://github.com/wu852174914/utils-fn/issues"
   },
   "homepage": "https://github.com/wu852174914/utils-fn#readme",
-  "keywords": ["fan-utils-fn", "utils", "fn", "fan-utils"],
+  "keywords": [
+    "fan-utils-fn",
+    "utils",
+    "fn",
+    "fan-utils"
+  ],
   "author": "852174914@qq.com",
   "license": "MIT",
   "devDependencies": {
