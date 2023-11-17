@@ -16,15 +16,6 @@
 
 ```
 ├── README.md
-├── config-server
-├── consul-config
-├── consul-discovery
-├── consul-server
-├── eureka-server
-├── gateway
-├── nacos-config
-├── nacos-discovery
-├── nacos-server
-├── ribbon-server
-├── sentinel-server
-├── zipkin-server
+├── src
+│   ├── index.js
+```
