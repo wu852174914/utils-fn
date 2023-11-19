@@ -1,5 +1,6 @@
+import { TreeNode, NodeInfo } from './types'
 /**
- * 判断数据类型
+ * @description 判断数据类型
  */
 // type JudetType = 'Boolean'|'Number'|'String'|'Function'|'Array'|'Date'|'RegExp'|'Object'|'Error'| ''
 export const judetType = () => {
@@ -13,7 +14,7 @@ export const judetType = () => {
   return utils;
 };
 /**
- * 四舍五入到最接近的基数
+ * @description 四舍五入到最接近的基数
  * @param num
  * @returns {number}
  */
@@ -39,7 +40,7 @@ export const roundToNearestBase = (num: number) => {
   return Math.round(num / base) * base
 }
 /**
- * 下载文件
+ * @description 下载文件
  * @param res 后端返回的response
  * @param name 文件名：可选，不传则获取res.headers['content-disposition']中截取文件名
  */
@@ -66,3 +67,122 @@ export const downloadFile = (res:any, name: string | undefined) => {
     link = null
   }
 }
+
+/**
+ * @description 将数组转为树状结构
+ * @param items 一维数组
+ * @param parentId 父节点id
+ * @returns TreeNode[]
+ * @demo const tree = arrayToTree(items);
+ */
+export const arrayToTree = (items: TreeNode[], parentId: number | null = null): TreeNode[] => {
+  const map = new Map<number, TreeNode>();
+  const roots: TreeNode[] = [];
+
+  items.forEach(item => {
+    map.set(item.id, { ...item, children: [] });
+  });
+
+  items.forEach(item => {
+    const node = map.get(item.id);
+    if (item.parentId === parentId) {
+      roots.push(node!);
+    } else {
+      const parent = map.get(item.parentId!);
+      parent?.children?.push(node!);
+    }
+  });
+
+  return roots;
+}
+
+/**
+ * @description 将树状结构数据结构为一维数组
+ * @param tree 树状结构数组
+ * @returns TreeNode[]
+ * @demo const flatArray = treeToArray(tree);
+ */
+export const treeToArray = (tree: TreeNode[]): TreeNode[] => {
+  const stack = [...tree];
+  const result: TreeNode[] = [];
+  while (stack.length) {
+    const node = stack.pop()!;
+    result.push(node);
+    if (node.children) {
+      stack.push(...node.children);
+    }
+  }
+  return result;
+}
+/**
+ * @description 查找树状结构中的某个节点以及父节点、子节点数据
+ * @param tree 树状结构数据
+ * @param key 要查找的关键字
+ * @param value 要查找的关键字的值
+ * @returns NodeInfo
+ * @demo const nodeInfo = findNodeInTree(tree, 'id', 2);
+ */
+export const findNodeInTree = (tree: TreeNode[], key: keyof TreeNode, value: any): NodeInfo | null => {
+  const stack: { node: TreeNode; path: TreeNode[] }[] = tree.map(node => ({ node, path: [] }));
+  while (stack.length) {
+    const { node, path } = stack.pop()!;
+    if (node[key] === value) {
+      // 找到节点后，提取其所有子节点
+      const children = treeToArray(node.children || []);
+      return { node, parents: path, children };
+    }
+    node.children?.forEach(child => {
+      stack.push({ node: child, path: path.concat(node) });
+    });
+  }
+  return null;
+}
+/**
+ * @description 防抖函数
+ * @param func 
+ * @param waitFor 
+ * @demo const debouncedFunction = debounce(() => console.log('Debounced!'), 500);
+ * window.addEventListener('resize', debouncedFunction); 
+ */
+export const debounce = <F extends (...args: any[]) => any>(func: F, waitFor: number): (...args: Parameters<F>) => void => {
+  let timeout: ReturnType<typeof setTimeout> | null = null;
+  return function(...args: Parameters<F>) {
+    if (timeout !== null) {
+      clearTimeout(timeout);
+    }
+    timeout = setTimeout(() => func(...args), waitFor);
+  };
+}
+/**
+ * @description 节流函数
+ * @param func 
+ * @param limit 
+ * @returns 
+ * @demo const throttledFunction = throttle(() => console.log('Throttled!'), 500);
+ * window.addEventListener('scroll', throttledFunction);
+ */
+export const throttle = <F extends (...args: any[]) => any>(func: F, limit: number): (...args: Parameters<F>) => void => {
+  let lastFunc: ReturnType<typeof setTimeout> | null = null;
+  let lastRan: number | null = null;
+
+  return function(...args: Parameters<F>) {
+    if (!lastRan) {
+      func(...args);
+      lastRan = Date.now();
+    } else {
+      clearTimeout(lastFunc!);
+
+      lastFunc = setTimeout(() => {
+        if (Date.now() - lastRan! >= limit) {
+          func(...args);
+          lastRan = Date.now();
+        }
+      }, limit - (Date.now() - lastRan));
+    }
+  };
+}
+
+
+
+
+
