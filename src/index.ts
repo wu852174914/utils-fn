@@ -182,6 +182,90 @@ export const throttle = <F extends (...args: any[]) => any>(func: F, limit: numb
   };
 }
 
+/**
+ * @description 深度合并两个对象。如果两个对象中的属性都是对象或数组，则分别进行深度合并或连接。
+ * 否则，第二个对象中的属性将覆盖第一个对象中的属性。
+ * 
+ * @param obj1 - 第一个要合并的对象。
+ * @param obj2 - 第二个对象，其属性将被合并到第一个对象中。
+ * @returns 返回合并后的对象。
+ */
+export const deepMerge = <T extends Record<string, any>, U extends Record<string, any>>(obj1: T, obj2: U): T & U => {
+  const result: Record<string, any> = { ...obj1 };
+  for (const key in obj2) {
+    if (obj2.hasOwnProperty(key)) {
+      if (typeof obj2[key] === 'object' && obj2[key] !== null && !Array.isArray(obj2[key])) {
+        result[key] = deepMerge(result[key] || {}, obj2[key]);
+      } else if (Array.isArray(obj2[key])) {
+        result[key] = Array.isArray(result[key]) ? result[key] : [result[key]].filter(val => val !== undefined);
+        const maxLength = Math.max(result[key].length, obj2[key].length);
+        for (let i = 0; i < maxLength; i++) {
+          if (typeof obj2[key][i] === 'object' && obj2[key][i] !== null) {
+            result[key][i] = deepMerge(result[key][i] || {}, obj2[key][i]);
+          } else {
+            result[key][i] = obj2[key][i] !== undefined ? obj2[key][i] : result[key][i];
+          }
+        }
+      } else {
+        result[key] = obj2[key];
+      }
+    }
+  }
+  return result as T & U;
+};
+
+/**
+ * @description 深拷贝一个对象，包括其内部嵌套的对象、数组、Map、Set、Date、RegExp 等。
+ * @param obj - 要深拷贝的对象。
+ * @returns 返回深拷贝后的对象。
+ */
+export const deepCopy = <T>(obj: T): T => {
+  if (obj === null || typeof obj !== 'object') {
+    return obj;
+  }
+
+  // 处理数组
+  if (Array.isArray(obj)) {
+    return obj.map(item => deepCopy(item)) as unknown as T;
+  }
+
+  // 处理日期
+  if (obj instanceof Date) {
+    return new Date(obj.getTime()) as unknown as T;
+  }
+
+  // 处理正则表达式
+  if (obj instanceof RegExp) {
+    return new RegExp(obj) as unknown as T;
+  }
+
+  // 处理Map
+  if (obj instanceof Map) {
+    const map = new Map();
+    obj.forEach((value, key) => {
+      map.set(key, deepCopy(value));
+    });
+    return map as unknown as T;
+  }
+
+  // 处理Set
+  if (obj instanceof Set) {
+    const set = new Set();
+    obj.forEach(value => {
+      set.add(deepCopy(value));
+    });
+    return set as unknown as T;
+  }
+
+  // 处理普通对象
+  const copiedObj = {} as Record<string, any>;
+  Object.keys(obj).forEach(key => {
+    copiedObj[key] = deepCopy((obj as Record<string, any>)[key]);
+  });
+  return copiedObj as T;
+}
+
+
 
 
 
