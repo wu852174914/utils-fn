@@ -12,6 +12,12 @@
 - 树状结构扁平化函数
 - 对象合并函数
 - 深拷贝函数
+- url中获取参数函数
+- 正则验证函数
+  - 手机号码验证
+  - 邮箱验证
+  - 身份证验证
+
 
 
 
@@ -20,5 +26,10 @@
 ```
 ├── README.md
 ├── src
-│   ├── index.js
+│   ├── types
+│   │   ├── type.ts
+│   ├── index.ts
+│   ├── utils
+│   │   ├── about-string.ts
+│   │   ├── validation.ts
 ```
