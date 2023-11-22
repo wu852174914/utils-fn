@@ -33,3 +33,26 @@
 │   │   ├── about-string.ts
 │   │   ├── validation.ts
 ```
+
+### 3. 安装
+
+```
+npm i fan-utils-fn
+```
+
+### 4. 使用
+
+```javascript
+
+import { judetType, validationUtilsFn } from 'fan-utils-fn'
+const utils = judetType()
+utils.isBoolean(123) // false
+utils.isObject([]) // false
+utils.isArray(123) // false
+utils.isBoolean(true) // true
+utils.isObject({name: 'utils'}) // true
+utils.isArray([]) // true
+
+validationUtilsFn('isValidPhoneNumber')('123') // false
+validationUtilsFn('isValidPhoneNumber')('15300000000') // true
+```

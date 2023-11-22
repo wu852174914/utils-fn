@@ -1,5 +1,6 @@
 import { TreeNode, NodeInfo } from './types/type'
 export * from './utils/validation'
+export * from './utils/about-string'
 /**
  * @description 判断数据类型
  */
