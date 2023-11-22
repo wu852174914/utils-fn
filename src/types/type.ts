@@ -10,3 +10,7 @@ export interface NodeInfo {
   parents: TreeNode[];
   children: TreeNode[];
 }
+type TYPES = 'Boolean' | 'Number' | 'String' | 'Function' | 'Array' | 'Date' | 'RegExp'| 'Object' | 'Error';
+export type Utils = {
+  [K in TYPES as `is${K}`]: (obj: any) => boolean;
+};

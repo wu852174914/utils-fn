@@ -1,19 +1,20 @@
-import { TreeNode, NodeInfo } from './types/type'
+import  { TreeNode, NodeInfo, Utils} from './types/type'
 export * from './utils/validation'
 export * from './utils/about-string'
+
 /**
- * @description 判断数据类型
+ * @description 类型判断函数
+ * @returns 
  */
-// type JudetType = 'Boolean'|'Number'|'String'|'Function'|'Array'|'Date'|'RegExp'|'Object'|'Error'| ''
-export const judetType = () => {
-  const utils: { [key: string]: (obj: any) => boolean } = {};
-  const TYPES = 'Boolean|Number|String|Function|Array|Date|RegExp|Object|Error';
-  TYPES.split('|').forEach(item => {
-    utils['is' + item] = function (obj: any): boolean {
+export const judetType = (): Utils => {
+  const utils: Partial<Utils> = {};
+  const TYPES = ['Boolean' , 'Number', 'String', 'Function', 'Array', 'Date', 'RegExp', 'Object', 'Error']
+  TYPES.forEach(item => {
+    utils[('is' + item) as 'isBoolean'] = function (obj: any): boolean {
       return Object.prototype.toString.call(obj) === `[object ${item}]`;
     };
   });
-  return utils;
+  return utils as Utils;
 };
 /**
  * @description 四舍五入到最接近的基数
