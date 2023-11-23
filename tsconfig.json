@@ -3,7 +3,7 @@
     /* Language and Environment */
     "target": "es2021",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
     /* Modules */
-    "module": "commonjs",                                /* Specify what module code is generated. */
+    "module": "CommonJS",                                /* Specify what module code is generated. */
     /* Emit */
     "declaration": true,
     // "declarationDir": "./dist/types",
@@ -20,7 +20,6 @@
   },
   "include": [
     "src/**/*.ts", // 包括 TypeScript 源文件
-    "declarations/**/*.d.ts" // 包括声明文件
   ],
   "exclude": ["node_modules", "dist"]
 }

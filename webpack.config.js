@@ -1,5 +1,7 @@
 const path = require('path');
-
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const { BundleDeclarationsWebpackPlugin } = require('bundle-declarations-webpack-plugin');
+console.log(BundleDeclarationsWebpackPlugin)
 module.exports = {
   mode: 'production',
   entry: './src/index.ts', // 项目的入口文件
@@ -10,7 +12,7 @@ module.exports = {
     globalObject: 'this' // 兼容不同环境的全局对象
   },
   resolve: {
-    extensions: ['.ts', '.js'] // 解析的文件扩展名
+    extensions: ['.ts'] // 解析的文件扩展名
   },
   module: {
     rules: [
@@ -21,4 +23,11 @@ module.exports = {
       }
     ]
   },
+  plugins: [
+    new CleanWebpackPlugin(),
+    new BundleDeclarationsWebpackPlugin({
+        entry: ["./src/index.ts"],
+        outFile: "main.d.ts",
+    }),
+]
 };
